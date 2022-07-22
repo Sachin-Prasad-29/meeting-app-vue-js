@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar />
+    <NavBar tab="meeting" />
     <div class="container">FilterMeeting</div>
   </div>
 </template>

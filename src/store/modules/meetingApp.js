@@ -14,7 +14,15 @@ const state = {
   name: localStorage.getItem(NAME_KEY) || '',
 };
 
-const getters = {};
+const getters = {
+  userEmail: (state) => {
+    return state.email;
+  },
+  getToken: (state) => {
+    console.log(state.token);
+    return state.token;
+  }
+};
 
 const mutations = {
   setToken(state, token) {
@@ -33,7 +41,7 @@ const mutations = {
 
 const actions = {
   async login({ commit }, data) {
-    console.log(data, ' calleding from action');
+    //console.log(data, ' calling from action');
     try{
     const response = await axios.post(`${config.BaseUrl}/auth/login`, data);
     const { message, token, email, name } = response.data;

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <NavBar tab ='Meeting' />
+    <NavBar tab="meeting" />
+
     <div class="container">AddMeetings</div>
   </div>
 </template>
@@ -15,4 +16,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

@@ -10,13 +10,12 @@ import TeamPage from '@/components/TeamPage';
 
 
 
-// EXERCISE: Set up a component WorkshopDetails that appears on /workshops/1
 const router = new Router({
   mode: 'history',
   routes: [
     {
       name: 'register',
-      path: '/register',
+      path: '/',
       component: RegisterPage,
     },
     {

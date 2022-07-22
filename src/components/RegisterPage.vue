@@ -68,19 +68,14 @@
 
 <script>
 import axios from 'axios';
-import AlertBox from '@/components/utils/AlertBox';
 import { mapActions } from 'vuex';
-import config from '@/config'
+import config from '@/config';
 
 export default {
   name: 'RegisterPage',
-  components: {
-    AlertBox,
-  },
+  components: {},
   data() {
     return {
-      success: false,
-      error: false,
       Message: '',
       username: '',
       email: '',
@@ -90,28 +85,17 @@ export default {
   },
   methods: {
     ...mapActions(['register']),
-    // To validate the form details
-    setBack() {
-      setTimeout(() => (this.error = false), 2500);
-      setTimeout(() => {
-        this.success = false;
-        }, 3000);
-    },
     isValid(data) {
       const name = data.name;
       const email = data.email;
       const password = data.password;
       const confirmPassword = data.confirmPassword;
       if (name === '') {
-        this.Message = 'Username Field Required';
-        this.error = true;
-        this.setBack();
+        this.$toast.error('Username Field Required');
         return false;
       }
       if (email === '') {
-        this.Message = 'Email Field Required';
-        this.error = true;
-        this.setBack();
+        this.$toast.error('Email Field Required');
         return false;
       }
       let passValid = () => {
@@ -119,36 +103,27 @@ export default {
         return re.test(password);
       };
       if (password == '') {
-        this.Message = 'Plese enter the password field';
-        this.error = true;
-        this.setBack();
+        this.$toast.error('Plese enter the password field');
         return false;
       }
       let passvalid = passValid();
       if (!passvalid) {
-        this.Message =
-          'Password must be at least eight characters and include a mix of upper and lower case letters, numbers, and symbols';
-        this.error = true;
-        this.setBack();
+        this.$toast.error(
+          'Password must be at least eight characters and include a mix of upper and lower case letters, numbers, and symbols'
+        );
         return false;
       }
 
-      
       if (confirmPassword == '') {
-        this.Message = 'Please enter confirm password field';
-        this.error = true;
-        this.setBack();
+        this.$toast.error('Please enter confirm password field');
         return false;
       }
       if (password.localeCompare(confirmPassword) != 0) {
-        this.Message = 'your Confirm password not matching';
-        this.error = true;
-        this.setBack();
+        this.$toast.error('your Confirm password not matching');
         return false;
       }
       return true;
     },
-
 
     async onRegister() {
       const data = {
@@ -158,23 +133,20 @@ export default {
         confirmPassword: this.confirmPassword,
       };
       if (this.isValid(data)) {
-          const registerData = { name:data.name, email:data.email, password:data.password};
-           await axios
+        const registerData = { name: data.name, email: data.email, password: data.password };
+        await axios
           .post(`${config.BaseUrl}/auth/register`, registerData)
           .then((response) => {
             console.log(response);
-            this.success = true;
-            this.setBack(this.success);
-            setTimeout(()=>{
-              this.$router.push("/login");
-            },2000)
-            
+            this.$toast.success('Sccuessfully Registered');
+            setTimeout(() => {
+              this.$router.push('/login');
+            }, 2000);
           })
           .catch((error) => {
             const err = error.request.response;
             this.Message = err.substring(12, 49);
-            this.error = true;
-            this.setBack();
+            this.$toast.error(this.Message.charAt(0).toUpperCase() + this.Message.slice(1));
           });
       } else {
         console.log('somthing error happend');
@@ -186,5 +158,4 @@ export default {
 
 <style scoped>
 @import '../assets/css/pages/register.css';
-
 </style>
