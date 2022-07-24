@@ -1,7 +1,5 @@
 <template>
   <div>
-    <AlertBox v-show="error" :Message="Message" alert="danger" />
-    <AlertBox v-show="success" Message="Successfully logged in" alert="success" />
     <div class="register-container">
       <div class="register-div">
         <div class="div-center"><h1>Login</h1></div>
@@ -23,7 +21,7 @@
           <div>
             <input type="submit" class="submit" value="Login" />
           </div>
-          <div>New User? <router-link to="/register" class="secondary"> Create account</router-link></div>
+          <div>New User? <router-link to="/" class="secondary"> Create account</router-link></div>
         </div>
       </form>
     </div>
@@ -31,14 +29,11 @@
 </template>
 
 <script>
-import AlertBox from '@/components/utils/AlertBox';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'LoginPage',
-  components: {
-    AlertBox,
-  },
+  components: {},
   data() {
     return {
       error: false,
@@ -49,30 +44,28 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['login']),
-    setBack() {
-      setTimeout(() => (this.error = false), 3000);
-      setTimeout(() => {
-        this.success = false;
-      }, 3000);
-    },
+    
+    ...mapActions(['fetchAllEmail', 'fetchAllTeam','login']),
+    
     isValid(data) {
       const email = data.email;
       const password = data.password;
 
       if (email === '') {
         this.Message = 'Email Field Required';
-        this.error = true;
-        this.setBack();
+
         return false;
       }
       if (password == '') {
-        this.Message = 'Plese enter the password field';
-        this.error = true;
-        this.setBack();
+        this.Message = 'Please enter the password field';
+
         return false;
       }
       return true;
+    },
+    async helper() {
+      await this.fetchAllEmail();
+      await this.fetchAllTeam();
     },
     async onLogin() {
       const data = {
@@ -82,21 +75,18 @@ export default {
       if (this.isValid(data)) {
         const msg = await this.login(data);
         if (msg) {
-          this.Message = 'Logined in Successfully';
-          this.success = true;
-          this.setBack();
+          await this.helper();
+          this.Message = 'Logged in Successfully';
+          this.$toast.success(this.Message);
           setTimeout(() => {
             this.$router.push('/calendar');
-          }, 2500);
+          }, 1000);
         } else {
           this.Message = 'Credentials do not match';
-          this.error = true;
-          this.setBack();
+          this.$toast.error(this.Message);
         }
       } else {
-        this.Message = 'Please enter email and password before logging in';
-        this.error = true;
-        this.setBack();
+        this.$toast.error(this.Message);
       }
     },
   },

@@ -5,6 +5,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import meetingApp from './modules/meetingApp';
 
+
 //Load Vuex
 Vue.use(Vuex);
 

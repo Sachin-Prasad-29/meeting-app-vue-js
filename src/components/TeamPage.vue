@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar tab='team'/>
+    <NavBar tab="team" />
     <div class="container">TeamPage</div>
   </div>
 </template>
