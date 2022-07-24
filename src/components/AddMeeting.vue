@@ -241,7 +241,7 @@ export default {
         description: this.description,
         attendees: allEmailFromTeam,
       };
-      console.log(data);
+      //console.log(data);
       const helper = async () => {
         this.meetingDetails = await meetingMethods.addMeeting(
           data,
@@ -250,6 +250,12 @@ export default {
       };
       if(helper()){
         this.$toast.success('Meeting added successfully !');
+        this.name= '';
+      this.date ='';
+      this.startTime= '';
+      this.endTime= '';
+      this.description= '';
+      this.attendees= [];
       }   
       else{
         this.$toast.error('Something Error happened. Please try Again ! !');

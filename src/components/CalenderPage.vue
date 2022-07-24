@@ -114,7 +114,9 @@
         </div>
       </div>
 
-      <div class="main-meeting-details-div" v-html="meetingDetails">{{ meetingDetails }}</div>
+      <div class="main-meeting-details-div"  >
+        <CalendarCard v-for="(meeting,index) in meetingDetails" :key="index" :meeting="meeting"/>
+      </div>
     </div>
   </div>
 </template>
@@ -124,11 +126,13 @@ import { mapGetters } from 'vuex';
 import NavBar from './NavBar';
 import { CalenderMethods } from '@/services/CalenderFetchMethod';
 import { getDateMethods } from '@/services/getDateformat';
+import CalendarCard from '@/components/utils/CalendarCard'
 
 export default {
   name: 'CalenderPage',
   components: {
     NavBar,
+    CalendarCard
   },
   data() {
     return {
@@ -158,7 +162,6 @@ export default {
         this.meetingDetails = await CalenderMethods.fetchAndShowCalender(
           this.message,
           this.getToken,
-          this.meetingDetails
         );
       };
       helper();

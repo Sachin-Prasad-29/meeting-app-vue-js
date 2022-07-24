@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '@/config';
 export const CalenderMethods = {
-  fetchAndShowCalender: async (date, token, meetingDetails) => {
+  fetchAndShowCalender: async (date, token) => {
     let calenderDetails;
     try {
       const response = await axios.get(`${config.BaseUrl}/calendar?date=${date}`, {
@@ -14,10 +14,9 @@ export const CalenderMethods = {
     } catch (error) {
       console.log(error);
     }
-    
-    
     //console.log(meetingDetails);
-    console.log(calenderDetails);
+    //console.log(calenderDetails);
+    const calenderArr =[];
     for (let i = 0; i < calenderDetails.length; i++) {
       const members = calenderDetails[i].attendees;
       let marginTop = calenderDetails[i].startTime.hours * 65 + calenderDetails[i].startTime.minutes;
@@ -35,24 +34,32 @@ export const CalenderMethods = {
       const endTime = heightOf;
 
       let attendeesList = attendees.join(", ");
-      const meetingStr = `
+      const meetingData = {
+        meetingName,
+        marginTop:startTime,
+        height:endTime,
+        attendeesList
+      };
+      calenderArr.push(meetingData);
+      // const meetingStr = `
 
-        <div class="meeing-guider">
-          <div class="hours-block">
-              <div class="block-time"></div>
-                <div
-                class="meeting-detail-div"
-                style="width:96%; margin-top:${startTime}px; height:${endTime}px"> 
-                <p class="m-0 p-0 font-bold">${meetingName}</p>
-                <hr/>
-                <span class="font-bold">Attendees: </span>${attendeesList}
-          </div>
-        </div>
-        </div>
+      //   <div class="meeing-guider">
+      //     <div class="hours-block">
+      //         <div class="block-time"></div>
+      //           <div
+      //           class="meeting-detail-div"
+      //           style="width:96%; margin-top:${startTime}px; height:${endTime}px"> 
+      //           <p class="m-0 p-0 font-bold">${meetingName}</p>
+      //           <hr/>
+      //           <span class="font-bold">Attendees: </span>${attendeesList}
+      //     </div>
+      //   </div>
+      //   </div>
 
-          `;
-          meetingDetails += meetingStr;
+      //     `;
+      //     meetingDetails += meetingStr;
     }
-    return meetingDetails;
+    
+    return calenderArr;
   },
 };

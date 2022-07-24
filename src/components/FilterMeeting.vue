@@ -13,13 +13,13 @@
       <div class="add-section bg-primary mt-1">
         <h2 class="mb-1">Search For meetings</h2>
         <hr />
-        <form action="#" id="filter-meetings" method="post">
+        <form @submit.prevent="onSearch" id="filter-meetings">
           <div>
             <div>
               <label for="period">Date</label>
             </div>
             <div class="dropdown-menus">
-              <select name="period" id="period" class="add-block add-block-filter">
+              <select name="period" id="period" v-model="period" class="add-block add-block-filter">
                 <option value="all">ALL</option>
                 <option value="past">PAST</option>
                 <option value="present">TODAY</option>
@@ -37,6 +37,7 @@
                 rows="2"
                 cols="100%"
                 name="search"
+                v-model="search"
                 id="search"
                 class="add-block"
                 placeholder="Search using words describe the meeting"
@@ -51,20 +52,65 @@
       </div>
       <h2>Meetings matching search criteria</h2>
       <hr />
+      
       <div id="filter-meeting-details">
-        <form method="post" id="add-member-to-meeting-${id}" class="add-member-to-meeting"></form>
-        <form method="post" id="add-member-to-meeting-${id}" class="add-member-to-meeting"></form>
+        <FilterMeetingCard />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import FilterMeetingCard from './utils/filterMeetingCard'
 import NavBar from './NavBar';
+import axios from 'axios';
+// import config from '@/config';
+import { displayMethods } from '@/services/displayAllFetchMeetings';
+
 export default {
   name: 'FilterMeetings',
   components: {
     NavBar,
+    FilterMeetingCard,
+  },
+  data() {
+    return {
+      period: 'all',
+      search: '',
+      filterMeetingDetails: '',
+      meetingId: '',
+      attendee: '',
+    };
+  },
+  methods: {
+    async onSearch() {
+      const period = this.period;
+      const search = this.search;
+      const token = this.$store.getters.getToken;
+      // console.log(token);
+      var req = {
+        method: 'get',
+        url: `https://mymeetingsapp.herokuapp.com/api/meetings?period=${period}&search=${search}`,
+        headers: {
+          Authorization: token,
+        },
+      };
+      try {
+        const response = await axios(req);
+        //console.log(response.data);
+        const display = async (data) => {
+          this.filterMeetingDetails = await displayMethods.displayMeetings(data);
+        };
+        await display(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+    async onAddAttendee(event) {
+      event.preventDefault();
+      alert(this.meetingId);
+      alert(this.attendee);
+    },
   },
 };
 </script>
