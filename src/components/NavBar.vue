@@ -7,7 +7,7 @@
             <router-link to="/calendar" class="link-plain items">
               <div class="nav-items float-left" :class="{ 'curr-page': tab === 'calendar' }">Calendar</div>
             </router-link>
-            <router-link to="/meetings/add" class="link-plain items">
+            <router-link to="/meetings-add" class="link-plain items">
               <div class="nav-items float-left" :class="{ 'curr-page': tab === 'meeting' }">Meetings</div>
             </router-link>
             <router-link to="/team" class="link-plain items">
@@ -39,7 +39,7 @@
             <router-link class="link" to="/calendar"
               ><li :class="{ 'curr-page': tab === 'calendar' }">Calendar</li></router-link
             >
-            <router-link class="link" to="/meetings/add"
+            <router-link class="link" to="/meetings-add"
               ><li :class="{ 'curr-page': tab === 'meeting' }">Meeting</li></router-link
             >
             <router-link class="link" to="/team"><li :class="{ 'curr-page': tab === 'team' }">Team</li></router-link>
@@ -158,17 +158,17 @@ i {
 }
 .mobile-nav-enter-active,
 .mobile-nav-leave-active {
-  transition: 0.6s ease all;
+  transition: 0.4s ease all;
 }
 .mobile-nav-enter-form {
   transform: translateY(0px);
 }
 .mobile-nav-leave-to {
-  transform: translateY(-250px);
+  transform: translateY(-300px);
 }
-.mobile-nav-enter-to {
+/* .mobile-nav-enter-to {
   transform: translateY(50px);
-}
+} */
 @media all and (max-width: 888px){
   .dis-non-md{
     display: none;

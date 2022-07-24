@@ -35,12 +35,12 @@ const router = new Router({
     },
     {
       name: 'meetings-add',
-      path: '/meetings/add',
+      path: '/meetings-add',
       component: AddMeeting,
     },
     {
       name: 'meetings-filter',
-      path: '/meetings/filter',
+      path: '/meetings-filter',
       component: FilterMeeting,
     },
     

@@ -15,4 +15,5 @@ export default {
 @import './assets/external/normalize.css/normalize.css';
 @import './assets/css/utils.css';
 @import './assets/external/@fortawesome/fontawesome-free/css/all.min.css';
+
 </style>

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import config from '@/config';
 export const CalenderMethods = {
-
   fetchAndShowCalender: async (date, token, meetingDetails) => {
     let calenderDetails;
     try {
@@ -35,7 +34,7 @@ export const CalenderMethods = {
       const startTime = marginTop;
       const endTime = heightOf;
 
-      let attendeesList = attendees.join(" ");
+      let attendeesList = attendees.join(", ");
       const meetingStr = `
 
         <div class="meeing-guider">
@@ -46,7 +45,7 @@ export const CalenderMethods = {
                 style="width:96%; margin-top:${startTime}px; height:${endTime}px"> 
                 <p class="m-0 p-0 font-bold">${meetingName}</p>
                 <hr/>
-                <span class="font-bold">Attendees:</span>${attendeesList}
+                <span class="font-bold">Attendees: </span>${attendeesList}
           </div>
         </div>
         </div>

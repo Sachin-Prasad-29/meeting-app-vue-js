@@ -44,7 +44,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['login']),
+    
+    ...mapActions(['fetchAllEmail', 'fetchAllTeam','login']),
+    
     isValid(data) {
       const email = data.email;
       const password = data.password;
@@ -61,6 +63,10 @@ export default {
       }
       return true;
     },
+    async helper() {
+      await this.fetchAllEmail();
+      await this.fetchAllTeam();
+    },
     async onLogin() {
       const data = {
         email: this.email,
@@ -69,6 +75,7 @@ export default {
       if (this.isValid(data)) {
         const msg = await this.login(data);
         if (msg) {
+          await this.helper();
           this.Message = 'Logged in Successfully';
           this.$toast.success(this.Message);
           setTimeout(() => {

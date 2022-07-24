@@ -1,7 +1,61 @@
 <template>
   <div>
     <NavBar tab="meeting" />
-    <div class="container">FilterMeeting</div>
+    <div class="container">
+      <h1 class="mb-1">Meetings</h1>
+      <hr />
+      <div class="sub-title">
+        <div class="selected-sub-title">
+          <router-link to="/meetings-filter" class="link-plain">Filter/Search meetings</router-link>
+        </div>
+        <div><router-link to="/meetings-add" class="link-plain">Add a meeting</router-link></div>
+      </div>
+      <div class="add-section bg-primary mt-1">
+        <h2 class="mb-1">Search For meetings</h2>
+        <hr />
+        <form action="#" id="filter-meetings" method="post">
+          <div>
+            <div>
+              <label for="period">Date</label>
+            </div>
+            <div class="dropdown-menus">
+              <select name="period" id="period" class="add-block add-block-filter">
+                <option value="all">ALL</option>
+                <option value="past">PAST</option>
+                <option value="present">TODAY</option>
+                <option value="future">UPCOMING</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <label for="search">Search for</label>
+            </div>
+            <div>
+              <textarea
+                rows="2"
+                cols="100%"
+                name="search"
+                id="search"
+                class="add-block"
+                placeholder="Search using words describe the meeting"
+              ></textarea>
+            </div>
+          </div>
+
+          <div>
+            <input type="submit" value="Search" class="submit-button" />
+          </div>
+        </form>
+      </div>
+      <h2>Meetings matching search criteria</h2>
+      <hr />
+      <div id="filter-meeting-details">
+        <form method="post" id="add-member-to-meeting-${id}" class="add-member-to-meeting"></form>
+        <form method="post" id="add-member-to-meeting-${id}" class="add-member-to-meeting"></form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,4 +69,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+@import '../assets/css/pages/meeting.css';
+@import '../assets/css/pages/meetings-filter-meetings.css';
+</style>
