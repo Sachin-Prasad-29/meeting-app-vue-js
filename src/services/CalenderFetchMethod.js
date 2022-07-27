@@ -10,13 +10,7 @@ export const CalenderMethods = {
         },
       });
       calenderDetails = response.data;
-      //console.log(calenderDetails);
-    } catch (error) {
-      console.log(error);
-    }
-    //console.log(meetingDetails);
-    //console.log(calenderDetails);
-    const calenderArr =[];
+      const calenderArr =[];
     for (let i = 0; i < calenderDetails.length; i++) {
       const members = calenderDetails[i].attendees;
       let marginTop = calenderDetails[i].startTime.hours * 65 + calenderDetails[i].startTime.minutes;
@@ -41,25 +35,17 @@ export const CalenderMethods = {
         attendeesList
       };
       calenderArr.push(meetingData);
-      // const meetingStr = `
-
-      //   <div class="meeing-guider">
-      //     <div class="hours-block">
-      //         <div class="block-time"></div>
-      //           <div
-      //           class="meeting-detail-div"
-      //           style="width:96%; margin-top:${startTime}px; height:${endTime}px"> 
-      //           <p class="m-0 p-0 font-bold">${meetingName}</p>
-      //           <hr/>
-      //           <span class="font-bold">Attendees: </span>${attendeesList}
-      //     </div>
-      //   </div>
-      //   </div>
-
-      //     `;
-      //     meetingDetails += meetingStr;
     }
     
     return calenderArr;
+      //console.log(calenderDetails);
+    } catch (error) {
+      console.log(error);
+      
+      return '';
+    }
+    //console.log(meetingDetails);
+    //console.log(calenderDetails);
+    
   },
 };

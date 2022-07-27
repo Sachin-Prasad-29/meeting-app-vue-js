@@ -4,16 +4,15 @@ body{
 }
 .register-container{
   width: 50%;
-  margin: 0px auto;
-  
-  
-  border: 20px ridge  rgb(155, 222, 237);
-  border-radius: 0px;
+  margin: 40px auto;
+  border: 1px solid  gray;
+  border-radius: 6px;
+  box-shadow: 0px 0px 50px 50px rgb(78, 231, 206);
 }
 .register-div {
   background-color: rgb(27, 115, 231);
   padding-bottom: 1.5em;
-  border-radius: 0px 0px 0 0;
+  border-radius: 5px 5px   0 0;
   color: rgb(248, 245, 245);
 }
 h1{
@@ -25,14 +24,14 @@ h1{
   padding: 5% 8%;
   border-top: none;
   background-color: rgb(85, 229, 248);
-  
+  border-radius: 0 0 5px 5px   ;
   font-size: 0.8em;
 }
 form .input-box {
   border: 1px solid rgba(211, 211, 211, 0);
   border-radius: 4px;
   font-size: 15px;
-  padding: 15px 10px;
+  padding: 10px 10px;
   margin: 0.8% 0 2.8% 0;
   width: 100%;
 }

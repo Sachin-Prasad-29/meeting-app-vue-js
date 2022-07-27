@@ -16,9 +16,9 @@ const state = {
   email: localStorage.getItem(EMAIL_KEY) || '',
   message: localStorage.getItem(MESSAGE_KEY) || '',
   name: localStorage.getItem(NAME_KEY) || '',
-  allUsers: localStorage.getItem(ALL_USERS) || [], //This array will all the data of the user
+  allUsers: localStorage.getItem(ALL_USERS).split(',') || [], //This array will all the data of the user
   allTeams: localStorage.getItem(ALL_TEAMS) || [], // This array will store the data of all the Teams
-  allTeamName: localStorage.getItem(ALL_TEAM_NAME) || [],
+  allTeamName: localStorage.getItem(ALL_TEAM_NAME).split(',') || [],
   teamObj: localStorage.getItem(TEAM_OBJECT) || [],
 };
 
@@ -64,7 +64,7 @@ const actions = {
     try {
       const response = await axios.post(`${config.BaseUrl}/auth/login`, data);
       const { message, token, email, name } = response.data;
-      console.log(email, message, name, token);
+      //console.log(email, message, name, token);
 
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(EMAIL_KEY, email);
@@ -126,13 +126,13 @@ const actions = {
       }
       teamEl.push({ [response.data[i].shortName]: teamArr });
     }
-    console.log(teamEl);
+    // console.log(teamEl);
     localStorage.setItem(ALL_TEAMS, teamEl);
     commit('setAllTeam', teamEl);
-    console.log(getters.getAllUsers(state));
-    console.log(getters.getAllTeams(state));
-    console.log(getters.getAllteamName(state));
-    console.log(getters.getTeamObj(state));
+    //console.log(getters.getAllUsers(state));
+    //console.log(getters.getAllTeams(state));
+    //console.log(getters.getAllteamName(state));
+    //console.log(getters.getTeamObj(state));
 
     // console.log(getters.getAllTeams(state));
   },

@@ -1,7 +1,5 @@
 <template>
   <div>
-    <AlertBox v-show="error" :Message="Message" alert="danger" />
-    <AlertBox v-show="success" Message="SuccessFully Registered" alert="success" />
     <div class="register-container">
       <div class="register-div">
         <div class="div-center"><h1>Create Account</h1></div>

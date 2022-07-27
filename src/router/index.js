@@ -1,14 +1,10 @@
 import Router from 'vue-router';
 import RegisterPage from '@/components/RegisterPage'
 import LoginPage from '@/components/LoginPage';
-// import NavBar from '@/components/NavBar';
 import CalenderPage from '@/components/CalenderPage';
 import AddMeeting from '@/components/AddMeeting';
 import FilterMeeting from '@/components/FilterMeeting';
 import TeamPage from '@/components/TeamPage';
-
-
-
 
 const router = new Router({
   mode: 'history',
@@ -44,7 +40,7 @@ const router = new Router({
       component: FilterMeeting,
     },
     
-    
+  
   ],
 });
 
