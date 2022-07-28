@@ -12,11 +12,11 @@
         <div class="mb-2">
             <button @click.prevent="excuse" class="btn btn-danger excuse-yourself">Excuse yourself</button>
         </div>
-
+        <p>{{ meeting.id }}</p>
         <hr />
         <div class="attendees mb-1">
             <span class="font-bold">Attendees:</span>
-            <span v-for="(att, index) in meeting.attendeesArr" :key="index">{{ att + ', ' }}</span>
+            <span v-for="(att, index) in attendeesArr" :key="index">{{ att + ', ' }}</span>
         </div>
 
         <div class="select-mem-div">
@@ -42,41 +42,75 @@
 <script>
 import { addAttendees } from '@/services/addAttendee';
 import { excuseYourself } from '@/services/excuseYourself';
+import { mapGetters } from 'vuex';
 
 export default {
-    name: 'FilterMeetingCard',
+    name: 'MeetingCard',
     props: {
         meeting: Object,
     },
     data() {
         return {
-            meetingId: this.meeting.id,
             selectedAttendee: '',
             userList: [],
-            atteData: this.meeting.attendeesArr,
-            token: this.$store.getters.getToken,
         };
     },
+    computed: {
+        ...mapGetters(['getToken', 'getAllUsers']),
+        meetingId() {
+            return this.meeting.id;
+        },
+        attendeesArr() {
+            return this.meeting.attendeesArr;
+        },
+    },
     mounted() {
-        this.userList = this.$store.getters.getAllUsers;
+        this.userList = this.getAllUsers;
     },
     methods: {
         async addAttendee() {
-            console.log('Add Attendee clicked');
-            const res = await addAttendees.addAttendeeToMeeting(this.meeting.id, this.selectedAttendee, this.token);
+            const attendeeSet = new Set(this.attendeesArr);
 
-            if (!res) {
-                alert('Please enter a valid user');
-            } else {
-                alert(' added to the Meeting');
+            if (!this.selectedAttendee) this.$toast.error('Please select one attendee');
+            else if (attendeeSet.has(this.selectedAttendee))
+                this.$toast.warning('Attendee already present in the Meeting');
+            else {
+                this.loadScreen = this.$loading.show({
+                    color: 'rgb(51, 102, 255)',
+                    backgroundColor: 'lightblue',
+                    blur: '9px',
+                    height: 150,
+                    width: 150,
+                });
+                const res = await addAttendees.addAttendeeToMeeting(
+                    this.meeting.id,
+                    this.selectedAttendee,
+                    this.getToken
+                );
+                if (res) {
+                    this.$emit('load');
+                    this.$toast.success('Attendee Added Sucessfully');
+                    this.loadScreen.hide();
+                } else {
+                    this.$toast.error('Something error happened');
+                }
             }
+
             this.selectedAttendee = '';
         },
         async excuse() {
-            console.log('excuse from meeting clicked');
-            const res = await excuseYourself.excuseMeeting(this.meetingId, this.token);
+            this.loadScreen = this.$loading.show({
+                color: 'rgb(51, 102, 255)',
+                backgroundColor: 'lightblue',
+                blur: '9px',
+                height: 150,
+                width: 150,
+            });
+            const res = await excuseYourself.excuseMeeting(this.meetingId, this.getToken);
             if (res) {
-                alert('Successfully Excused from meeting');
+                this.$emit('load');
+                this.$toast.success('Successfully Excused from meeting');
+                this.loadScreen.hide();
             } else {
                 alert('Cant excuse something Error happend');
             }

@@ -1,31 +1,35 @@
 .selected-sub-title {
-  border: 1px solid gray;
-  border-bottom: 1px solid white;
-  border-radius: 5px 5px 0px 0px;
+    border: 1px solid gray;
+    border-bottom: 1px solid white;
+    border-radius: 5px 5px 0px 0px;
 }
 .sub-title .selected-sub-title a {
-  color: black;
+    color: black;
 }
 .dropdown-menus {
-  width: 102%;
+    width: 102%;
 }
 .meeting-date {
-  font-size: 1.2em;
-  font-weight: 700;
+    font-size: 1.2em;
+    font-weight: 700;
 }
 .meeting-time {
-  font-size: 0.9em;
+    font-size: 0.9em;
 }
 .search-result {
-  border: 1px solid lightgray;
-  padding: 0.5em 1em;
-  border-radius: 5px;
+    border: 1px solid rgb(161, 160, 160);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+}
+.search-result:hover {
+    -webkit-box-shadow: 0 0 10px rgb(0, 162, 255);
+        box-shadow: 0 0 10px rgb(0, 162, 255);
 }
 .select-members {
-  padding: 8px;
+    padding: 8px;
 }
 
 .select-mem-div .btn {
-  margin-left: 6px;
-  padding: 11px 20px 10px 20px
+    margin-left: 6px;
+    padding: 11px 20px 10px 20px;
 }

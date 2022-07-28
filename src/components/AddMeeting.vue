@@ -118,7 +118,7 @@ import { mapGetters } from 'vuex';
 import NavBar from '@/components/utils/NavBar.vue';
 import axios from 'axios';
 import config from '@/config';
-import { addMethods } from '@/services/addMethods';
+import { addResourcesMethods } from '@/services/addResourcesMethods';
 
 export default {
     name: 'AddMeetings',
@@ -143,16 +143,12 @@ export default {
     updated() {
         this.getAllRes();
     },
-    beforeCreate() {},
     methods: {
         getAllRes() {
             // THIS METHOD WILL COLLECT ALL THE RESOURCES REQUIRED FOR THE VALIDATION OF ATTENDEES LIKE ALL THE EMAIL AND TEAM DATA
-            //console.log('Hello User');
             this.userArr = this.$store.getters.getAllUsers;
-            this.teamArr = this.$store.getters.getAllteamName;
+            this.teamArr = this.$store.getters.getAllTeamName;
             const emailAndTeam = [];
-            // this.userArr = this.userArr.length > 0 ? this.userArr.split(',') : [];
-            // this.teamArr = this.teamArr.length > 0 ? this.teamArr.split(',') : [];
             for (let i = 0; i < this.userArr.length; i++) {
                 emailAndTeam.push(this.userArr[i]);
             }
@@ -160,7 +156,6 @@ export default {
                 emailAndTeam.push(this.teamArr[i]);
             }
             this.allEmailAndTeam = emailAndTeam;
-            //console.log(emailAndTeam);
         },
         isValid() {
             if (this.name === '') {
@@ -188,8 +183,15 @@ export default {
 
         async onSubmit() {
             if (this.isValid()) {
-                // This part validate the attendees and teams
+                this.loadScreen = this.$loading.show({
+                    color: 'rgb(51, 102, 255)',
+                    backgroundColor: 'lightblue',
+                    blur: '9px',
+                    height: 150,
+                    width: 150,
+                });
 
+                // This part validate the attendees and teams
                 const tempArr = this.attendees ? this.attendees.split(',') : [];
                 const attendeeArr = tempArr.map((element) => {
                     return element.trim();
@@ -211,67 +213,75 @@ export default {
                     }
                 }
                 if (flag) {
-                    const response = await axios.get(`${config.BaseUrl}/teams`, {
-                        headers: {
-                            Authorization: this.$store.getters.getToken,
-                        },
-                    });
-                    // console.log(response.data);
-                    // console.log(this.attendees);
-                    let allEmailFromTeam = [];
-                    for (let k = 0; k < attendeeArr.length; k++) {
-                        if (attendeeArr[k][0] !== '@') continue;
-                        let team = attendeeArr[k].substring(1);
-                        for (let i = 0; i < response.data.length; i++) {
-                            if (team === response.data[i].shortName) {
-                                for (let j = 0; j < response.data[i].members.length; j++) {
-                                    allEmailFromTeam.push(response.data[i].members[j].email);
+                    try {
+                        const response = await axios.get(`${config.BaseUrl}/teams`, {
+                            headers: {
+                                Authorization: this.$store.getters.getToken,
+                            },
+                        });
+                        this.loadScreen.hide();
+
+                        let allEmailFromTeam = [];
+                        for (let k = 0; k < attendeeArr.length; k++) {
+                            if (attendeeArr[k][0] !== '@') continue;
+                            let team = attendeeArr[k].substring(1);
+                            for (let i = 0; i < response.data.length; i++) {
+                                if (team === response.data[i].shortName) {
+                                    for (let j = 0; j < response.data[i].members.length; j++) {
+                                        allEmailFromTeam.push(response.data[i].members[j].email);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
+
+                        for (let i = 0; i < attendeeArr.length; i++) {
+                            if (this.attendees[i][0] === '@') continue;
+                            allEmailFromTeam.push(attendeeArr[i]);
+                        }
+
+                        const data = {
+                            name: this.name,
+                            date: this.date,
+                            startTime: {
+                                hours: parseInt(this.startTime.substring(0, 2)),
+                                minutes: parseInt(this.startTime.substring(3, 5)),
+                            },
+                            endTime: {
+                                hours: parseInt(this.endTime.substring(0, 2)),
+                                minutes: parseInt(this.endTime.substring(3, 5)),
+                            },
+                            description: this.description,
+                            attendees: allEmailFromTeam,
+                        };
+                        //console.log(data);
+                        const helper = async () => {
+                            this.meetingDetails = await addResourcesMethods.addMeeting(data, this.getToken);
+                        };
+                        if (helper()) {
+                            this.$toast.success('Meeting added successfully !');
+                            this.name = '';
+                            this.date = '';
+                            this.startTime = '';
+                            this.endTime = '';
+                            this.description = '';
+                            this.attendees = [];
+                        } else {
+                            this.$toast.error('Something Error happened. Please try Again !');
+                        }
+                    } catch (error) {
+                        console.log(error.message);
+                        this.loadScreen.hide();
                     }
-                    // console.log(allEmailFromTeam);
-                    for (let i = 0; i < attendeeArr.length; i++) {
-                        if (this.attendees[i][0] === '@') continue;
-                        allEmailFromTeam.push(attendeeArr[i]);
-                    }
-                    //console.log(allEmailFromTeam);
-                    const data = {
-                        name: this.name,
-                        date: this.date,
-                        startTime: {
-                            hours: parseInt(this.startTime.substring(0, 2)),
-                            minutes: parseInt(this.startTime.substring(3, 5)),
-                        },
-                        endTime: {
-                            hours: parseInt(this.endTime.substring(0, 2)),
-                            minutes: parseInt(this.endTime.substring(3, 5)),
-                        },
-                        description: this.description,
-                        attendees: allEmailFromTeam,
-                    };
-                    //console.log(data);
-                    const helper = async () => {
-                        this.meetingDetails = await addMethods.addMeeting(data, this.getToken);
-                    };
-                    if (helper()) {
-                        this.$toast.success('Meeting added successfully !');
-                        this.name = '';
-                        this.date = '';
-                        this.startTime = '';
-                        this.endTime = '';
-                        this.description = '';
-                        this.attendees = [];
-                    } else {
-                        this.$toast.error('Something Error happened. Please try Again !');
-                    }
-                } else console.log('Clean Exit');
+                } else {
+                    this.loadScreen.hide();
+                    console.log('Clean Exit');
+                }
             }
         },
     },
     computed: {
-        ...mapGetters(['getToken']),
+        ...mapGetters(['getToken', 'getA']),
         allmailAndTeam() {
             return this.allEmailAndTeam;
         },

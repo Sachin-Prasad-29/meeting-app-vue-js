@@ -54,27 +54,26 @@
             <hr />
 
             <div id="filter-meeting-details">
-                <FilterMeetingCard v-for="(meeting, index) in filterMeetingDetails" :key="index" :meeting="meeting" />
+                <MeetingCard v-for="(meeting, index) in filterMeetingDetails" :key="index" :meeting="meeting"  @load='onSearch'/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
-import FilterMeetingCard from './utils/filterMeetingCard';
+import MeetingCard from './utils/MeetingCard';
 import NavBar from '@/components/utils/NavBar.vue';
-import axios from 'axios';
 
 // import config from '@/config';
-import { displayMethods } from '@/services/fetchAndDisplay';
+import { displayMethods } from '@/services/displayMethods';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'FilterMeetings',
 
     components: {
         NavBar,
-        FilterMeetingCard,
+        MeetingCard,
     },
 
     data() {
@@ -86,36 +85,24 @@ export default {
             attendee: '',
         };
     },
-    computed:{
-        token(){
-            return this.$store.getters.getToken;
-        }
+    computed: {
+        ...mapGetters(['getToken']),
+        // filterMeeting(){
+        //     return this.filterMeetingDetails;
+        // }
     },
 
     methods: {
         async onSearch() {
-            const period = this.period;
-            const search = this.search;
-            const token = this.token;
-
-            var req = {
-                method: 'get',
-                url: `https://mymeetingsapp.herokuapp.com/api/meetings?period=${period}&search=${search}`,
-                headers: {
-                    Authorization: token,
-                },
-            };
-
-            try {
-                const response = await axios(req);
-                const display = async (data) => {
-                    this.filterMeetingDetails = await displayMethods.displayMeetings(data);
-                };
-                await display(response.data);
-            } 
-            catch (error) {
-                console.log(error.message);
-            }
+            this.loadScreen = this.$loading.show({
+                color: 'rgb(51, 102, 255)',
+                backgroundColor: 'lightblue',
+                blur: '9px',
+                height: 150,
+                width: 150,
+            });
+            this.filterMeetingDetails = await displayMethods.displayMeetings(this.period, this.search, this.getToken);
+            this.loadScreen.hide();
         },
     },
 };

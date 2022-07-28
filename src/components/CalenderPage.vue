@@ -136,6 +136,7 @@ export default {
     },
     data() {
         return {
+            status: true,
             message: '',
             date: '',
             month: '',
@@ -145,14 +146,12 @@ export default {
         };
     },
     methods: {
-        date_function: function () {
-            var formatted_date = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
-            this.message = formatted_date;
+        dateFunction: function () {
+            var formattedDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
+            this.message = formattedDate;
         },
         setCalDate() {
-            //console.log(this.message);
-            const dateData = getDateMethods.getDate(this.message); // getting the selected date from calendar
-            //console.log(dateData);
+            const dateData = getDateMethods.getDate(this.message); // getting the 
             this.date = dateData.cdate;
             this.month = dateData.month;
             this.year = dateData.year;
@@ -160,17 +159,27 @@ export default {
             this.meetingDetails = '';
             const helper = async () => {
                 this.meetingDetails = await CalenderMethods.fetchAndShowCalender(this.message, this.getToken);
+                this.loadScreen.hide();
             };
             helper();
-            //fetching the calendar details
         },
     },
     created() {
-        this.date_function();
+        this.loadScreen = this.$loading.show({
+            color: 'rgb(51, 102, 255)',
+            backgroundColor: 'lightblue',
+            blur: '9px',
+            height: 150,
+            width: 150,
+        });
+        this.dateFunction();
         this.setCalDate();
     },
     computed: {
         ...mapGetters(['getToken']),
+        loadingScreen() {
+            return this.status;
+        },
         todayDate() {
             return this.date + ' ' + this.month + ' ' + this.year;
         },

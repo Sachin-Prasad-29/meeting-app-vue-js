@@ -23,7 +23,7 @@
                         </router-link>
                         <router-link to="/calendar" class="link-plain items" id="loged-in-user">
                             <div class="nav-items float-right dis-non-md">
-                                Hello,<span class="primary"> {{ userEmail }}</span> !
+                                Hello,<span class="primary"> {{ userName }}</span> !
                             </div>
                         </router-link>
                     </div>
@@ -49,7 +49,7 @@
                         >
                         <router-link class="link" to="/calendar"
                             ><li>
-                                Hello <span class="primary"> {{ userEmail }}</span> !
+                                Hello <span class="primary"> {{ userName }}</span> !
                             </li></router-link
                         >
                         <router-link class="link" to="/login"><li>logout</li></router-link>
@@ -63,6 +63,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
+
 export default {
     name: 'NavBar',
     data() {
@@ -74,6 +75,7 @@ export default {
         };
     },
     props: ['tab'],
+
     created() {
         window.addEventListener('resize', this.checkScreen);
         this.checkScreen();
@@ -92,8 +94,11 @@ export default {
             this.mobileNav = false;
             return;
         },
+        
     },
-    computed: mapGetters(['userEmail']),
+    computed: {
+        ...mapGetters(['userName', 'userEmail']),
+    },
 };
 </script>
 
@@ -162,7 +167,7 @@ i {
 }
 .mobile-nav-enter-active,
 .mobile-nav-leave-active {
-    transition: 0.4s ease all;
+    transition: 0.6s ease all;
 }
 .mobile-nav-enter-form {
     transform: translateY(0px);
