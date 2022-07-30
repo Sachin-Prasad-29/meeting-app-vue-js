@@ -7,12 +7,11 @@
             <button @click.prevent="excuse" class="btn btn-danger excuse-yourself-from-team">Excuse yourself</button>
         </div>
         <hr />
-        <!-- {{ teamId }} -->
         <div class="attendees mb-1">
             <span class="font-bold">Attendees: </span>
             <span v-for="(member, index) in team.members" :key="index">{{ member.email + ', ' }}</span>
         </div>
-        <div class="select-mem-div">
+        <div>
             <form @submit.prevent="addMember" class="add-member-to-team">
                 <input
                     type="email"
@@ -25,7 +24,7 @@
                 <datalist id="members">
                     <option v-for="(user, index) in userList" :key="index" :value="user">{{ user }}</option>
                 </datalist>
-                <input type="submit" value="Add" class="btn-primary btn select-members" />
+                <input type="submit" value="Add" class="btn-primary btn " />
             </form>
         </div>
     </div>
@@ -34,7 +33,6 @@
 <script>
 import { addAttendees } from '@/services/addAttendee';
 import { excuseYourself } from '@/services/excuseYourself';
-import { displayMethods } from '@/services/displayMethods';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -49,40 +47,55 @@ export default {
             userList: [],
         };
     },
-    
+
     mounted() {
         this.userList = this.getAllUsers;
     },
-    computed:{
-        ...mapGetters(['getToken','getAllUsers']),
+    computed: {
+        ...mapGetters(['getToken', 'getAllUsers']),
     },
     methods: {
         // this function will get called when we add any member to the existing Team
         async addMember() {
-            console.log('addMember clicked');
-            const res = await addAttendees.addMemberToTeam(this.teamId, this.selectedMember, this.getToken);
-            if (!res) {
-                alert('Please enter a valid user');
-            } else {
-                alert('added to the Team');
-            }
+            addAttendees
+                .addMemberToTeam(this.teamId, this.selectedMember, this.getToken)
+                .then((res) => {
+                    if (res) {
+                        this.$emit('reLoadTeam');
+                        this.$toast.success('Member Added');
+                    } else {
+                        this.$toast.error('Some error happended');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    this.$toast.error('Error !');
+                });
             this.selectedMember = '';
         },
         // this function will get called when we excuse ourself from the existing team
         async excuse() {
-            console.log('excuse yourself clicked');
-            const res = await excuseYourself.excuseTeam(this.teamId, this.getToken);
-            if (res) {
-                const loader = async (token) => await displayMethods.displayTeams(token);
-                loader(this.getToken);
-                alert('Successfully Excused from Team');
-            } else {
-                alert('Cant excuse something Error happend');
-            }
+            excuseYourself
+                .excuseTeam(this.teamId, this.getToken)
+                .then((response) => {
+                    if (response) {
+                        this.$emit('reLoadTeam');
+                        this.$toast.success('Your Excused from Team');
+                    } else {
+                        this.$toast.error('Some error happended');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    this.$toast.error('Something Error Happended');
+                });
         },
     },
-
 };
 </script>
 
-<style></style>
+<style scoped>
+.content{
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}</style>

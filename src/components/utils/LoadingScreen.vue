@@ -10,8 +10,8 @@ export default {
             color: 'rgb(51, 102, 255)',
             backgroundColor: 'lightblue',
             blur: '9px',
-            height: 150,
-            width: 150,
+            height: 100,
+            width: 100,
         });
     }
 }

@@ -3,7 +3,28 @@
     gap: 1.5em;
     grid-template-columns: repeat(1, 1fr);
 }
+#teams-form .content {
+    border: 1px solid rgb(141, 143, 145);
+    border-radius: 5px;
+    padding: 0;
+    font-size: 0.9em;
+}
 
+#teams-form .content-title {
+    background-color: rgb(10, 180, 237);
+    padding: 15px 10px;
+    text-align: center;
+    margin: 0;
+}
+#teams-form .input-div {
+    text-align: center;
+}
+
+.input-label-div {
+    padding-left: 5%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
 .teams-info {
     display: grid;
     gap: 1.5em;
@@ -11,22 +32,30 @@
 }
 
 .add-team-element {
-    width: 100%;
-    padding: 7px;
+    width: 90%;
+    padding: 9px 15px;;
     font-size: 0.9em;
+    margin: 0 auto;
     margin-bottom: 0.7em;
+    border: 1px solid gray;
+    border-radius: 6px;
+    -webkit-transition: 0.5s;
+    transition: 0.4s;
 }
 
 .add-team-button {
-    width: 95%;
+    width: 90%;
     padding: 10px;
     font-size: 0.9em;
-    margin-bottom: 0.7em;
-    margin-left: 2.5%;
+    margin-bottom: 1.25em;
+    margin-left: 5%;
 }
 .team-search-result:hover {
     -webkit-box-shadow: 0 0 10px rgb(0, 162, 255);
     box-shadow: 0 0 10px rgb(0, 162, 255);
+    font-size: 1.03em;
+    border-radius: 0;
+    border: 1.75px solid rgb(91, 90, 90);
 }
 
 @media all and (min-width: 678px) {
@@ -51,7 +80,7 @@
 }
 
 .content {
-    border: 1px solid rgba(81, 73, 73, 0.722);
+    border: 1px solid rgba(151, 151, 150, 0.722);
     padding: 10px;
     border-radius: 5px;
 }
@@ -62,8 +91,33 @@
     margin: 10px;
 }
 .select-members {
-    padding: 8px;
+    padding: 8px 15px;
+    border: 1px solid gray;
+    border-radius: 6px;
+    -webkit-transition: 0.5s;
+    transition: 0.4s;
+    margin-right: 9px;
 }
-.select-mem-div .btn {
-    padding: 10px;
+.select-members:hover,
+.add-team-element:hover {
+    border: 1px solid green;
+    -webkit-box-shadow: 0 0 10px rgb(157, 255, 0);
+    box-shadow: 0 0 10px rgba(8, 39, 141, 0.568);
 }
+.select-members:focus,
+.add-team-element:focus {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 9px 8px;
+    -webkit-box-shadow: 0 0 10px rgb(157, 255, 0);
+    box-shadow: 0 0 10px rgba(8, 39, 141, 0.568);
+}
+
+.select-mem-div{
+    padding-left: 3%;
+}
+.add-member-to-team .btn {
+    padding: 9px;
+}
+
+
+

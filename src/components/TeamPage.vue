@@ -7,14 +7,23 @@
             <div class="text-gray font-bold my-2">View and edit teams you are part of</div>
             <div class="main-team-block">
                 <div class="teams-info">
-                    <TeamCard v-for="(team, index) in computedTeamData" :key="index" :team="team" />
+                    <TeamCard
+                        v-for="(team, index) in computedTeamData"
+                        :key="index"
+                        :team="team"
+                        @reLoadTeam="loadTeams"
+                    />
                 </div>
 
-                <div class="teams-form">
-                    <div class="content bg-lightyellow">
+                <div class="teams-form " id="teams-form">
+                    <div class="content">
                         <div class="content-title font-bold">Add new Team</div>
                         <form @submit.prevent="onAddTeam" id="add-team-from">
-                            <div class="">
+                            <div class="input-label-div">
+                                <label>Team Name</label>
+                            </div>
+
+                            <div class="input-div">
                                 <input
                                     type="text"
                                     name="team-name"
@@ -23,7 +32,10 @@
                                     v-model="name"
                                 />
                             </div>
-                            <div class="">
+                            <div class="input-label-div">
+                                <label>Team Short Name</label>
+                            </div>
+                            <div class="input-div">
                                 <input
                                     type="text"
                                     name="team-short-name"
@@ -32,7 +44,10 @@
                                     v-model="shortName"
                                 />
                             </div>
-                            <div>
+                            <div class="input-label-div">
+                                <label>Description</label>
+                            </div>
+                            <div class="input-div">
                                 <textarea
                                     rows="2"
                                     cols=""
@@ -102,20 +117,7 @@ export default {
         };
     },
     created() {
-        this.loadScreen = this.$loading.show({
-            color: 'rgb(51, 102, 255)',
-            backgroundColor: 'lightblue',
-            blur: '9px',
-            height: 150,
-            width: 150,
-        });
-        this.userList = this.getAllUsers;
-        this.allTeamNameArr = this.getAllTeamName;
-        const helper = async (token) => {
-            this.teamData = await displayMethods.displayTeams(token);
-            this.loadScreen.hide();
-        };
-        helper(this.getToken);
+        this.loadTeams();
     },
 
     computed: {
@@ -130,9 +132,33 @@ export default {
 
     methods: {
         ...mapActions(['setAllTeam', 'setAllTeamName']),
+        async loadTeams() {
+            this.loadScreen = this.$loading.show({
+                color: 'rgb(51, 102, 255)',
+                backgroundColor: 'lightblue',
+                blur: '9px',
+                height: 150,
+                width: 150,
+            });
+            this.userList = this.getAllUsers;
+            this.allTeamNameArr = this.getAllTeamName;
+
+            displayMethods
+                .displayTeams(this.getToken)
+                .then((response) => {
+                    this.teamData = response;
+                    this.loadScreen.hide();
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    this.$toast.error('Some error Happened');
+                    this.loadScreen.hide();
+                });
+        },
         addMember() {
-            if (this.memberList.has(this.newMember)) {
-                this.$toast.error('Member already selected');
+            if (!this.newMember) this.$toast.error('Please select One valid member');
+            else if (this.memberList.has(this.newMember)) {
+                this.$toast.warning('Member already selected');
                 this.newMember = '';
             } else {
                 this.memberList.add(this.newMember);
@@ -141,13 +167,6 @@ export default {
             }
         },
         onAddTeam() {
-            this.loadScreen = this.$loading.show({
-                color: 'rgb(51, 102, 255)',
-                backgroundColor: 'lightblue',
-                blur: '9px',
-                height: 150,
-                width: 150,
-            });
             const members = Array.from(this.memberList);
             const data = {
                 name: this.name,
@@ -155,32 +174,22 @@ export default {
                 description: this.description,
                 members,
             };
-
-
-            //const helper = async (data) => await addResourcesMethods.addTeam(data, this.getToken);
-
             addResourcesMethods
                 .addTeam(data, this.getToken)
                 .then((response) => {
                     if (!response) {
-                         this.$$toast.error("Something wrong happened");
-                        this.loadScreen.hide();
+                        this.$$toast.error('Something wrong happened');
                     } else {
                         this.allTeamNameArr.push('@' + data.shortName);
                         this.memberList = new Set();
                         this.name = this.shortName = this.description = '';
-                        const loader = async (token) => {
-                            //console.log('This is called');
-                            this.teamData = await displayMethods.displayTeams(token);
-                        };
-                        loader(this.getToken);
-                        this.$toast.success("Team Added");
-                        this.loadScreen.hide();
+
+                        this.loadTeams();
+                        this.$toast.success('Team Added');
                     }
                 })
                 .catch((error) => {
                     console.log(error.message);
-                    this.loadScreen.hide();
                 });
         },
     },
@@ -189,4 +198,14 @@ export default {
 
 <style scoped>
 @import '@/assets/css/pages/teams.css';
+.main-team-block{
+    margin-bottom: 30px;
+}
+.select-members input:focus,
+.add-team-element input:focus {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 8px 8px;
+    -webkit-box-shadow: 0 0 10px rgb(157, 255, 0);
+    box-shadow: 0 0 10px rgba(8, 39, 141, 0.568);
+}
 </style>

@@ -8,18 +8,18 @@
                 }}
             </span>
         </div>
-        <div class="meeting-name">{{ meeting.name }}</div>
+        <div class="meeting-name font-bold">{{ meeting.name }}</div>
         <div class="mb-2">
             <button @click.prevent="excuse" class="btn btn-danger excuse-yourself">Excuse yourself</button>
         </div>
-        <p>{{ meeting.id }}</p>
+        <!-- <p>{{ meeting.id }}</p> -->
         <hr />
         <div class="attendees mb-1">
-            <span class="font-bold">Attendees:</span>
+            <span class="font-bold">Attendees : </span>
             <span v-for="(att, index) in attendeesArr" :key="index">{{ att + ', ' }}</span>
         </div>
 
-        <div class="select-mem-div">
+        <div class="select-mem-divs">
             <form @submit.prevent="addAttendee" class="add-member-to-meeting">
                 <input
                     type="email"
@@ -27,13 +27,13 @@
                     name="emails"
                     v-model="selectedAttendee"
                     id="emails"
-                    class="select-members"
+                    class="select-member"
                     placeholder="Select members"
                 />
                 <datalist id="members" class="meeting-card-datalist">
                     <option v-for="(user, index) in userList" :key="index" :value="user">{{ user }}</option>
                 </datalist>
-                <input type="submit" value="Add" class="btn-primary btn select-members" />
+                <input type="submit" value="Add" class="btn-primary btn select-member" />
             </form>
         </div>
     </div>
@@ -122,4 +122,8 @@ export default {
 <style scoped>
 @import '@/assets/css/pages/meeting.css';
 @import '@/assets/css/pages/meetings-filter-meetings.css';
+.search-result{
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
 </style>

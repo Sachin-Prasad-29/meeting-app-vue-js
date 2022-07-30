@@ -85,7 +85,7 @@ export const displayMethods = {
             return response.data;
         } catch (error) {
             console.log(error.message);
-            return error.message;
+            return false;
         }
     },
 };

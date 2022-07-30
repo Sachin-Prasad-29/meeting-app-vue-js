@@ -19,7 +19,7 @@
 
                     <div class="ele-grid list-unstyle menu right-menu">
                         <router-link to="/login" class="link-plain items" id="log-out">
-                            <div class="nav-items float-right">logout</div>
+                            <div @click.prevent="logOut()" class="nav-items float-right">logout</div>
                         </router-link>
                         <router-link to="/calendar" class="link-plain items" id="loged-in-user">
                             <div class="nav-items float-right dis-non-md">
@@ -28,12 +28,12 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="icon">
+                <div class="menu-icon">
                     <i
                         @click="toggleMobileNav"
                         v-show="mobile"
                         class="fa-solid fa-bars"
-                        :class="{ 'icon-active': mobileNav }"
+                        :class="{ 'menu-icon-active': mobileNav }"
                     ></i>
                 </div>
                 <transition class="container" name="mobile-nav">
@@ -52,7 +52,7 @@
                                 Hello <span class="primary"> {{ userName }}</span> !
                             </li></router-link
                         >
-                        <router-link class="link" to="/login"><li>logout</li></router-link>
+                        <router-link class="link" to="/login"><li @click.prevent="logOut()">logout</li></router-link>
                     </ul>
                 </transition>
             </nav>
@@ -62,7 +62,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
+// import logout from '@/services/accountServices';
 
 export default {
     name: 'NavBar',
@@ -94,8 +94,13 @@ export default {
             this.mobileNav = false;
             return;
         },
-        
+        logOut() {
+            console.log('logout clicked');
+            localStorage.clear();
+            this.$router.replace('/login');
+        },
     },
+
     computed: {
         ...mapGetters(['userName', 'userEmail']),
     },
@@ -144,7 +149,7 @@ li:hover {
     border-bottom: 3px solid rgb(4, 163, 255);
     background-color: rgba(173, 214, 220, 0.578);
 }
-.icon {
+.menu-icon {
     color: black;
     display: flex;
     align-items: center;
@@ -158,7 +163,7 @@ li:hover {
 i {
     transition: 0.6s ease all;
 }
-.icon-active {
+.menu-icon-active {
     transform: rotate(180deg);
 }
 .dropdown-nav {
