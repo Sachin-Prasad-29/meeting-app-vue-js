@@ -16,16 +16,19 @@
 }
 .add-section div .add-block {
   width: 98%;
-  margin: 10px auto;
+  margin: 0px auto;
   padding: 10px 1%;
   border: 1px solid rgb(155, 152, 152);
   border-radius: 8px;
+  margin-top: 8px;
+
 }
 .time-block {
-  margin: 10px auto;
+  margin: 0px auto;
   padding: 9px 1%;
   border: 1px solid rgb(155, 152, 152);
   border-radius: 8px;
+  margin-top: 8px;
 }
 .submit-button {
   margin: 10px 0;

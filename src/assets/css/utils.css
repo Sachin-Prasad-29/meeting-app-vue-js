@@ -99,9 +99,7 @@ hr {
 .bg-primary {
   background-color: rgba(98, 188, 240, 0.671);
 }
-.bg-lightyellow {
-  background-color: rgb(250, 249, 239);
-}
+
 .font-bold {
   font-weight: 700;
 }
@@ -149,3 +147,4 @@ nav div div a:hover {
 .display-line {
   display: inline;
 }
+

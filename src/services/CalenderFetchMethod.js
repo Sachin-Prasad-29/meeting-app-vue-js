@@ -1,65 +1,54 @@
 import axios from 'axios';
 import config from '@/config';
+
+//This method used to fetch the all meetting details based on Selected Date  it will take date and token as an argument to fetch the data
 export const CalenderMethods = {
-  fetchAndShowCalender: async (date, token) => {
-    let calenderDetails;
-    try {
-      const response = await axios.get(`${config.BaseUrl}/calendar?date=${date}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      calenderDetails = response.data;
-      //console.log(calenderDetails);
-    } catch (error) {
-      console.log(error);
-    }
-    //console.log(meetingDetails);
-    //console.log(calenderDetails);
-    const calenderArr =[];
-    for (let i = 0; i < calenderDetails.length; i++) {
-      const members = calenderDetails[i].attendees;
-      let marginTop = calenderDetails[i].startTime.hours * 65 + calenderDetails[i].startTime.minutes;
-      let heightOf = 65 * (calenderDetails[i].endTime.hours - calenderDetails[i].startTime.hours) - 5;
-      if (calenderDetails[i].endTime.minutes - calenderDetails[i].startTime.minutes != 0) {
-        heightOf += 5 + calenderDetails[i].endTime.minutes;
-      }
-      let memberEmail = [];
-      for (let j = 0; j < members.length; j++) {
-        memberEmail[j] = members[j].email;
-      }
-      const meetingName = calenderDetails[i].name;
-      const attendees = memberEmail;
-      const startTime = marginTop;
-      const endTime = heightOf;
+    fetchAndShowCalender: async (date, token) => {
+        let calenderDetails;
+        try {
+            const response = await axios.get(`${config.BaseUrl}/calendar?date=${date}`, {
+                headers: {
+                    Authorization: token,
+                },
+            });
 
-      let attendeesList = attendees.join(", ");
-      const meetingData = {
-        meetingName,
-        marginTop:startTime,
-        height:endTime,
-        attendeesList
-      };
-      calenderArr.push(meetingData);
-      // const meetingStr = `
+            //  Here this response we got as an response from the server which contains all the details all the meeting on the selected date
+            //  Now we will convert the response.date in the our required format to plot it into the calender
+            calenderDetails = response.data;
+            const calenderArr = [];
 
-      //   <div class="meeing-guider">
-      //     <div class="hours-block">
-      //         <div class="block-time"></div>
-      //           <div
-      //           class="meeting-detail-div"
-      //           style="width:96%; margin-top:${startTime}px; height:${endTime}px"> 
-      //           <p class="m-0 p-0 font-bold">${meetingName}</p>
-      //           <hr/>
-      //           <span class="font-bold">Attendees: </span>${attendeesList}
-      //     </div>
-      //   </div>
-      //   </div>
+            // here in this for loop for every meeting we calcuating the height and marginTop from startTime and endTime
+            // To plot the values in the div in the calendar page
+            for (let i = 0; i < calenderDetails.length; i++) {
+                const members = calenderDetails[i].attendees;
+                let marginTop = calenderDetails[i].startTime.hours * 65 + calenderDetails[i].startTime.minutes;
+                let heightOf = 65 * (calenderDetails[i].endTime.hours - calenderDetails[i].startTime.hours) - 5;
+                if (calenderDetails[i].endTime.minutes - calenderDetails[i].startTime.minutes != 0) {
+                    heightOf += 5 + calenderDetails[i].endTime.minutes;
+                }
+                let memberEmail = [];
+                for (let j = 0; j < members.length; j++) {
+                    memberEmail[j] = members[j].email;
+                }
+                const meetingName = calenderDetails[i].name;
+                const attendees = memberEmail;
+                const startTime = marginTop;
+                const endTime = heightOf;
 
-      //     `;
-      //     meetingDetails += meetingStr;
-    }
-    
-    return calenderArr;
-  },
+                let attendeesList = attendees.join(', ');
+                const meetingData = {
+                    meetingName,
+                    marginTop: startTime,
+                    height: endTime,
+                    attendeesList,
+                };
+                calenderArr.push(meetingData);
+            }
+
+            return calenderArr;
+        } catch (error) {
+            console.log(error);
+            return '';
+        }
+    },
 };
