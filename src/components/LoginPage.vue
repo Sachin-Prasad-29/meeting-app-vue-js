@@ -23,7 +23,7 @@
                         <transition name="bounce">
                             <div v-if="$v.email.$error" class="errorMessage">
                                 <p v-if="!$v.email.required">Email is Required</p>
-                                <p v-else-if="$v.email.$invalid">Please enter valid email</p>
+                                <p v-else-if="$v.email.$invalid">Please enter valid email !</p>
                             </div>
                         </transition>
                     </div>
@@ -61,8 +61,8 @@
                         </div>
                         <transition name="bounce">
                             <div v-if="$v.password.$error" class="errorMessage">
-                                <p v-if="!$v.password.required">Password is Required</p>
-                                <p v-else-if="!$v.password.minLength">Password should contain 8 minimum character</p>
+                                <p v-if="!$v.password.required">Password is Required !</p>
+                                <p v-else-if="!$v.password.minLength">Password should contain 8 minimum character !</p>
                             </div>
                         </transition>
                     </div>
@@ -83,17 +83,18 @@ import { required, email, minLength } from 'vuelidate/lib/validators';
 
 export default {
     name: 'LoginPage',
+
     components: {},
+
     data() {
         return {
-            error: false,
             success: false,
-            Message: '',
             email: '',
             password: '',
             showPassword: false,
         };
     },
+
     validations: {
         email: {
             required,
@@ -115,67 +116,39 @@ export default {
             minLength: minLength(8),
         },
     },
+
     computed: {
         buttonLabel() {
             return this.showPassword ? 'Hide' : 'Show';
         },
     },
+
     methods: {
         ...mapActions(['fetchAllEmail', 'fetchAllTeam', 'login']),
-
-        isValid(data) {
-            const email = data.email;
-            const password = data.password;
-
-            if (email === '') {
-                this.Message = 'Email Field Required';
-                this.loadScreen.hide();
-                return false;
-            }
-            if (password == '') {
-                this.Message = 'Please enter the password field';
-                this.loadScreen.hide();
-                return false;
-            }
-            return true;
-        },
+        
         async helper() {
             await this.fetchAllEmail();
             await this.fetchAllTeam();
         },
+
         async onLogin() {
-            this.loadScreen = this.$loading.show({
-                color: 'rgb(51, 102, 255)',
-                backgroundColor: 'lightblue',
-                blur: '9px',
-                height: 150,
-                width: 150,
-            });
+            this.loadScreen = this.$loading.show(this.$spinner);
             const data = {
                 email: this.email,
                 password: this.password,
             };
-            console.log(data);
-            if (this.isValid(data)) {
-                const msg = await this.login(data);
-                if (msg) {
-                    await this.helper();
-                    this.Message = 'Logged in Successfully';
-                    this.$toast.success(this.Message);
-                    setTimeout(() => {
-                        this.loadScreen.hide();
-                        this.$router.push('/calendar');
-                    }, 800);
-                } else {
-                    this.Message = 'Credentials do not match';
-                    this.loadScreen.hide();
-                    this.$toast.error(this.Message);
-                }
+            const msg = await this.login(data);
+            if (msg) {
+                await this.helper();
+                this.$toast.success('Logged in Successfully');
+                this.loadScreen.hide();
+                this.$router.push('/calendar');
             } else {
                 this.loadScreen.hide();
-                this.$toast.error(this.Message);
+                this.$toast.error('Credentials do not match');
             }
         },
+
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) {
@@ -185,6 +158,7 @@ export default {
                 this.onLogin();
             }
         },
+        
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
@@ -213,14 +187,11 @@ export default {
     background: rgb(0, 211, 255);
     background: linear-gradient(
         90deg,
-        rgba(0, 213, 255, 0.398) 38%,
-        rgba(121, 209, 155, 0.456) 77%,
-        rgba(16, 235, 133, 0.448) 98%
+        rgba(0, 213, 255, 0.562) 38%,
+        rgba(121, 209, 155, 0.562) 77%,
+        rgba(16, 235, 133, 0.548) 98%
     );
     z-index: -1;
     border-radius: 100% 0 0 0%;
-     
 }
 </style>
-
-#f9f9f9 79d19b

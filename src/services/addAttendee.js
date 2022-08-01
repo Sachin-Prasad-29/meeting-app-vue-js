@@ -3,6 +3,7 @@
  * and members to the  Existing Team.
  */
 import axios from 'axios';
+import config from '@/config';
 
 export const addAttendees = {
     /**
@@ -12,7 +13,7 @@ export const addAttendees = {
     addAttendeeToMeeting: async (meetingId, attendee, token) => {
         const req = {
             method: 'patch',
-            url: `https://mymeetingsapp.herokuapp.com/api/meetings/${meetingId}?action=add_attendee&email=${attendee}`,
+            url: `${config.BaseUrl}/meetings/${meetingId}?action=add_attendee&email=${attendee}`,
             headers: {
                 Authorization: token,
             },
@@ -33,7 +34,7 @@ export const addAttendees = {
     addMemberToTeam: async (teamId, member, token) => {
         const req = {
             method: 'patch',
-            url: `https://mymeetingsapp.herokuapp.com/api/teams/${teamId}?action=add_member&email=${member}`,
+            url: `${config.BaseUrl}/teams/${teamId}?action=add_member&email=${member}`,
             headers: {
                 Authorization: token,
             },

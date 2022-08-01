@@ -46,31 +46,36 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'MeetingCard',
+
     props: {
         meeting: Object,
     },
+
     data() {
         return {
             selectedAttendee: '',
             userList: [],
         };
     },
+
     computed: {
         ...mapGetters(['getToken', 'getAllUsers']),
         meetingId() {
             return this.meeting.id;
         },
+
         attendeesArr() {
             return this.meeting.attendeesArr;
         },
     },
+
     mounted() {
         this.userList = this.getAllUsers;
     },
+
     methods: {
         async addAttendee() {
             const attendeeSet = new Set(this.attendeesArr);
-
             if (!this.selectedAttendee) this.$toast.error('Please select one attendee');
             else if (attendeeSet.has(this.selectedAttendee))
                 this.$toast.warning('Attendee already present in the Meeting');
@@ -95,17 +100,11 @@ export default {
                     this.$toast.error('Something error happened');
                 }
             }
-
             this.selectedAttendee = '';
         },
+
         async excuse() {
-            this.loadScreen = this.$loading.show({
-                color: 'rgb(51, 102, 255)',
-                backgroundColor: 'lightblue',
-                blur: '9px',
-                height: 150,
-                width: 150,
-            });
+            this.loadScreen = this.$loading.show(this.$spinner);
             const res = await excuseYourself.excuseMeeting(this.meetingId, this.getToken);
             if (res) {
                 this.$emit('load');
@@ -122,8 +121,4 @@ export default {
 <style scoped>
 @import '@/assets/css/pages/meeting.css';
 @import '@/assets/css/pages/meetings-filter-meetings.css';
-.search-result{
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-}
 </style>

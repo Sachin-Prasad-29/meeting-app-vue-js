@@ -68,7 +68,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.auth && !localStorage.getItem('token')) {
-        next('/login');
+        next('*');
     } else if (!to.meta.auth && localStorage.getItem('token')) {
         next('/calendar');
     } else {

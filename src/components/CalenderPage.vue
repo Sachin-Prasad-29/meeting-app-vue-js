@@ -130,10 +130,12 @@ import CalendarCard from '@/components/utils/CalendarCard';
 
 export default {
     name: 'CalenderPage',
+
     components: {
         NavBar,
         CalendarCard,
     },
+
     data() {
         return {
             status: true,
@@ -145,13 +147,31 @@ export default {
             meetingDetails: '',
         };
     },
+
+    created() {
+        this.loadScreen = this.$loading.show(this.$spinner);
+        this.dateFunction();
+        this.setCalDate();
+    },
+
+    computed: {
+        ...mapGetters(['getToken']),
+        loadingScreen() {
+            return this.status;
+        },
+        todayDate() {
+            return this.date + ' ' + this.month + ' ' + this.year;
+        },
+    },
+
     methods: {
         dateFunction: function () {
             var formattedDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
             this.message = formattedDate;
         },
+        
         setCalDate() {
-            const dateData = getDateMethods.getDate(this.message); // getting the 
+            const dateData = getDateMethods.getDate(this.message); // getting the
             this.date = dateData.cdate;
             this.month = dateData.month;
             this.year = dateData.year;
@@ -162,26 +182,6 @@ export default {
                 this.loadScreen.hide();
             };
             helper();
-        },
-    },
-    created() {
-        this.loadScreen = this.$loading.show({
-            color: 'rgb(51, 102, 255)',
-            backgroundColor: 'lightblue',
-            blur: '9px',
-            height: 150,
-            width: 150,
-        });
-        this.dateFunction();
-        this.setCalDate();
-    },
-    computed: {
-        ...mapGetters(['getToken']),
-        loadingScreen() {
-            return this.status;
-        },
-        todayDate() {
-            return this.date + ' ' + this.month + ' ' + this.year;
         },
     },
 };

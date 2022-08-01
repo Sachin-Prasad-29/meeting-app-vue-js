@@ -23,7 +23,7 @@
                         />
                         <transition name="bounce">
                             <div v-if="$v.username.$error" class="errorMessage">
-                                <p v-if="!$v.username.required">Username is Required</p>
+                                <p v-if="!$v.username.required">Username is Required !</p>
                             </div>
                         </transition>
                     </div>
@@ -42,8 +42,8 @@
                         />
                         <transition name="bounce">
                             <div v-if="$v.email.$error" class="errorMessage">
-                                <p v-if="!$v.email.required">Email is Required</p>
-                                <p v-else-if="$v.email.$invalid">Please enter valid email</p>
+                                <p v-if="!$v.email.required">Email is Required !</p>
+                                <p v-else-if="$v.email.$invalid">Please enter valid Email !</p>
                             </div>
                         </transition>
                     </div>
@@ -81,9 +81,9 @@
                         </div>
                         <transition name="bounce">
                             <div v-if="$v.password.$error" class="errorMessage">
-                                <p v-if="!$v.password.required">Password is Required</p>
-                                <p v-else-if="!$v.password.minLength">Password should contain 8 minimum character</p>
-                                <p v-else-if="!$v.password.passwordValidation">Password does contain some format</p>
+                                <p v-if="!$v.password.required">Password is Required !</p>
+                                <p v-else-if="!$v.password.minLength">Password should contain 8 Minimum Character !</p>
+                                <p v-else-if="!$v.password.passwordValidation">Password must contain One Upper, Lower , Numeric and Special Character !</p>
                             </div>
                         </transition>
                     </div>
@@ -106,7 +106,7 @@
                         />
                         <transition name="bounce">
                             <div v-if="$v.confirmPassword.$error" class="errorMessage">
-                                <p v-if="!$v.confirmPassword.sameAsPassword">Password must be identical</p>
+                                <p v-if="!$v.confirmPassword.sameAsPassword">Password must be identical 1</p>
                             </div>
                         </transition>
                     </div>
@@ -128,7 +128,9 @@ import { register } from '@/services/accountServices';
 
 export default {
     name: 'RegisterPage',
+
     components: {},
+
     data() {
         return {
             Message: '',
@@ -140,6 +142,7 @@ export default {
             submitStatus: null,
         };
     },
+
     validations: {
         username: {
             required,
@@ -157,15 +160,10 @@ export default {
             sameAsPassword: sameAs('password'),
         },
     },
+
     methods: {
         async onRegister() {
-            this.loadScreen = this.$loading.show({
-                color: 'rgb(51, 102, 255)',
-                backgroundColor: 'lightblue',
-                blur: '9px',
-                height: 150,
-                width: 150,
-            });
+             this.loadScreen = this.$loading.show(this.$spinner);
             const data = {
                 name: this.username,
                 email: this.email,
@@ -184,9 +182,11 @@ export default {
                 this.loadScreen.hide();
             }
         },
+
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
+        
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) {
@@ -219,9 +219,9 @@ export default {
     background: rgb(16, 235, 137);
     background: linear-gradient(
         90deg,
-        rgba(16, 235, 137, 0.276) 9%,
-        rgba(121, 209, 155, 0.342) 36%,
-        rgba(0, 229, 255, 0.326) 62%
+        rgba(16, 235, 137, 0.534) 9%,
+        rgba(121, 209, 155, 0.527) 36%,
+        rgba(0, 229, 255, 0.527) 62%
     );
 
     z-index: -1;

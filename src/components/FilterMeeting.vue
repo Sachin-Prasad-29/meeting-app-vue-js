@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mt-2">
                         <div>
                             <label for="search">Search for</label>
                         </div>
@@ -54,7 +54,12 @@
             <hr />
 
             <div id="filter-meeting-details">
-                <MeetingCard v-for="(meeting, index) in filterMeetingDetails" :key="index" :meeting="meeting"  @load='onSearch'/>
+                <MeetingCard
+                    v-for="(meeting, index) in filterMeetingDetails"
+                    :key="index"
+                    :meeting="meeting"
+                    @load="onSearch"
+                />
             </div>
         </div>
     </div>
@@ -87,20 +92,11 @@ export default {
     },
     computed: {
         ...mapGetters(['getToken']),
-        // filterMeeting(){
-        //     return this.filterMeetingDetails;
-        // }
     },
 
     methods: {
         async onSearch() {
-            this.loadScreen = this.$loading.show({
-                color: 'rgb(51, 102, 255)',
-                backgroundColor: 'lightblue',
-                blur: '9px',
-                height: 150,
-                width: 150,
-            });
+             this.loadScreen = this.$loading.show(this.$spinner);
             this.filterMeetingDetails = await displayMethods.displayMeetings(this.period, this.search, this.getToken);
             this.loadScreen.hide();
         },

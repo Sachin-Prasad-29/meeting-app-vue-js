@@ -8,7 +8,7 @@
             <main>
                 <h1>Sorry!</h1>
                 <p>Either you aren't cool enough to visit this page or it doesn't exist!</p>
-                <router-link :to="{ name: 'home' }">Wanna try going home?</router-link>
+                <router-link :to="{ name: 'login' }"><button class="btn-submit">Login</button></router-link>
             </main>
         </div>
     </div>
@@ -21,8 +21,7 @@ export default {
 </script>
 
 <style scoped>
-
-
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
 * {
     box-sizing: 0;
     margin: 0;
@@ -37,9 +36,17 @@ body {
     line-height: 1.5;
     color: white;
 }
+.btn-submit {
+    margin: 20px 0 15px 0;
+    padding: 9px 30px;
+    background-color: rgb(9, 168, 115);
+    color: white;
+    border: none;
+    font-size: 1.2em;
+    border-radius: 8px;
+}
 
-.div-box{
-
+.div-box {
     display: flex;
     align-items: center;
     height: 100vh;
@@ -77,14 +84,15 @@ main {
 }
 
 main h1 {
-    font-family: 'Fontdiner Swanky', cursive;
-    font-size: 4rem;
-    color: #c5dc50;
+    font-family: 'Carter One', cursive;
+    font-size: 5rem;
+    color: #ea2323;
     margin-bottom: 1rem;
 }
 
 main p {
     margin-bottom: 2.5rem;
+    color: red;
 }
 
 main p em {
@@ -106,7 +114,7 @@ main p em {
     }
     aside {
         background-image: none;
-        background-color: white;
+        /* background-color: white; */
     }
     aside img {
         max-width: 300px;
@@ -137,5 +145,4 @@ main p em {
     z-index: -1;
     border-radius: 0 0 100% 0%;
 }
-
 </style>

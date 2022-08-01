@@ -48,8 +48,7 @@ export const addResourcesMethods = {
             data: rawData,
         };
         try {
-            const response = await axios(req);
-            console.log(response.data);
+            await axios(req);
             return true;
         } catch (error) {
             console.log(error.message);

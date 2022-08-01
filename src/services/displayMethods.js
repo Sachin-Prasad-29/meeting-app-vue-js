@@ -1,7 +1,13 @@
+/**
+ * In This sevices We added two methods which will be used to fetch and display the data of Meeting Details in Meeting Page
+ * and Your Teams detials in Teams Page
+ */
+
 import axios from 'axios';
 import config from '@/config';
 
 export const displayMethods = {
+    // displayMeetings method will take period (all,future,past,present ) ,search (any keyboard from meeting descriptin ) and token as arguments and fethc the All Meeting datails from the database
     displayMeetings: async (period, search, token) => {
         var req = {
             method: 'get',
@@ -14,6 +20,9 @@ export const displayMethods = {
         try {
             const response = await axios(req);
             const data = response.data;
+
+            // After geeting the data from Server as response
+            // We will format the date based on the requirement and store the required format data into the fetchedMeetingList Array
             const fetchedMeetingList = [];
             const month = [
                 'January',
@@ -67,11 +76,12 @@ export const displayMethods = {
             }
             return fetchedMeetingList;
         } catch (error) {
+            // But if any error happens during the fetch Process we just Simplly return the empty array
             console.log(error.message);
             return '';
         }
     },
-
+    // displayTeams method fetch all you team details and return it as as response else return false
     displayTeams: async (token) => {
         const req = {
             method: 'get',

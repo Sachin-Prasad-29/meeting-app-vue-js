@@ -1,3 +1,4 @@
+// this services Is using to create the loading screen object
 export const spinner = () => {
     return this.$loading.show({
         color: 'rgb(51, 102, 255)',

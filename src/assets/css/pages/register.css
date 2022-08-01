@@ -1,6 +1,6 @@
 .register-container {
     width: 40%;
-    margin: 40px auto;
+    margin: 25px auto;
     border: 1px solid gray;
     border-radius: 15px;
     /* box-shadow: 0px 0px 50px 50px rgba(131, 233, 194, 0.327); */
@@ -37,6 +37,10 @@ h1 {
     border: none;
     font-size: 1.2em;
     border-radius: 8px;
+    cursor: pointer;
+}
+.btn-submit:hover {
+    background-color: rgb(6, 118, 81);
 }
 @media all and (max-width: 900px) {
     .register-container {
@@ -128,6 +132,3 @@ h1 {
 .errorMessage p {
     margin: 5px;
 }
-
-
-

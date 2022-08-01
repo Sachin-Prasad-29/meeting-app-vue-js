@@ -1,3 +1,4 @@
+// This method is used to get the required for the calender Page my takeing the standard date input as an argument
 
 export const getDateMethods ={
     getDate :(date) =>{

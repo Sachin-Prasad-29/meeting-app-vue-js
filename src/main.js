@@ -10,7 +10,13 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import Vuelidate from 'vuelidate';
 
 Vue.config.productionTip = false;
-
+Vue.prototype.$spinner = {
+    color: 'rgb(51, 102, 255)',
+    backgroundColor: 'lightblue',
+    blur: '9px',
+    height: 150,
+    width: 150,
+};
 Vue.use(Router);
 Vue.use(VueLoading);
 Vue.use(VueToast, {

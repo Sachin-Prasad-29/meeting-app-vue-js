@@ -62,10 +62,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-// import logout from '@/services/accountServices';
 
 export default {
     name: 'NavBar',
+    
     data() {
         return {
             scrollPosition: null,
@@ -74,16 +74,23 @@ export default {
             windowWidth: null,
         };
     },
+
     props: ['tab'],
 
     created() {
         window.addEventListener('resize', this.checkScreen);
         this.checkScreen();
     },
+
+    computed: {
+        ...mapGetters(['userName', 'userEmail']),
+    },
+
     methods: {
         toggleMobileNav() {
             this.mobileNav = !this.mobileNav;
         },
+
         checkScreen() {
             this.windowWidth = window.innerWidth;
             if (this.windowWidth <= 700) {
@@ -94,15 +101,13 @@ export default {
             this.mobileNav = false;
             return;
         },
+
         logOut() {
-            console.log('logout clicked');
+            this.loadScreen = this.$loading.show(this.$spinner);
             localStorage.clear();
+            this.loadScreen.hide();
             this.$router.replace('/login');
         },
-    },
-
-    computed: {
-        ...mapGetters(['userName', 'userEmail']),
     },
 };
 </script>
@@ -126,7 +131,6 @@ ul {
     clear: both;
     width: 100%;
 }
-
 ul,
 .link {
     font-weight: 500;
@@ -180,9 +184,7 @@ i {
 .mobile-nav-leave-to {
     transform: translateY(-300px);
 }
-/* .mobile-nav-enter-to {
-  transform: translateY(50px);
-} */
+
 @media all and (max-width: 888px) {
     .dis-non-md {
         display: none;

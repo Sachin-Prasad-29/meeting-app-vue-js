@@ -24,7 +24,7 @@
                 <datalist id="members">
                     <option v-for="(user, index) in userList" :key="index" :value="user">{{ user }}</option>
                 </datalist>
-                <input type="submit" value="Add" class="btn-primary btn " />
+                <input type="submit" value="Add" class="btn-primary btn" />
             </form>
         </div>
     </div>
@@ -37,9 +37,11 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'FetchedTeamCard',
+
     props: {
         team: Object,
     },
+
     data() {
         return {
             teamId: this.team._id,
@@ -51,26 +53,35 @@ export default {
     mounted() {
         this.userList = this.getAllUsers;
     },
+
     computed: {
         ...mapGetters(['getToken', 'getAllUsers']),
     },
     methods: {
         // this function will get called when we add any member to the existing Team
         async addMember() {
-            addAttendees
-                .addMemberToTeam(this.teamId, this.selectedMember, this.getToken)
-                .then((res) => {
-                    if (res) {
-                        this.$emit('reLoadTeam');
-                        this.$toast.success('Member Added');
-                    } else {
-                        this.$toast.error('Some error happended');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                    this.$toast.error('Error !');
-                });
+            const set = new Set(this.team.members.map((item) => item.email));
+            console.log(this.team);
+            console.log(set);
+            console.log(this.selectedMember);
+            if (set.has(this.selectedMember)) {
+                this.$toast.warning('Member already present in the Team !');
+            } else {
+                addAttendees
+                    .addMemberToTeam(this.teamId, this.selectedMember, this.getToken)
+                    .then((res) => {
+                        if (res) {
+                            this.$emit('reLoadTeam');
+                            this.$toast.success('Member Added');
+                        } else {
+                            this.$toast.error('Some error happended');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                        this.$toast.error('Error !');
+                    });
+            }
             this.selectedMember = '';
         },
         // this function will get called when we excuse ourself from the existing team
@@ -95,7 +106,8 @@ export default {
 </script>
 
 <style scoped>
-.content{
+.content {
     -webkit-transition: 0.4s;
     transition: 0.4s;
-}</style>
+}
+</style>

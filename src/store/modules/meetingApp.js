@@ -1,6 +1,5 @@
 // Its our meeting app module where we put all our state , getters, actions and mutations
-import axios from 'axios';
-import config from '@/config';
+import { getAllEmail, getAllTeam, loginUser } from '@/services/accountServices';
 
 const TOKEN_KEY = 'token';
 const EMAIL_KEY = 'email';
@@ -11,17 +10,19 @@ const ALL_TEAMS = 'allTeams';
 const ALL_TEAM_NAME = 'allTeamName';
 const TEAM_OBJECT = 'teamObj';
 
+// All the states of the store
 const state = {
     token: localStorage.getItem(TOKEN_KEY) || '',
     email: localStorage.getItem(EMAIL_KEY) || '',
     message: localStorage.getItem(MESSAGE_KEY) || '',
     name: localStorage.getItem(NAME_KEY) || '',
-    allUsers:localStorage.getItem(ALL_USERS)? localStorage.getItem(ALL_USERS).split(',') : [], //This array will all the data of the user
-    allTeams: localStorage.getItem(ALL_TEAMS) || [], // This array will store the data of all the Teams
-    allTeamName:localStorage.getItem(ALL_TEAM_NAME)? localStorage.getItem(ALL_TEAM_NAME).split(',') : [],
+    allUsers: localStorage.getItem(ALL_USERS) ? localStorage.getItem(ALL_USERS).split(',') : [],
+    allTeams: localStorage.getItem(ALL_TEAMS) || [],
+    allTeamName: localStorage.getItem(ALL_TEAM_NAME) ? localStorage.getItem(ALL_TEAM_NAME).split(',') : [],
     teamObj: localStorage.getItem(TEAM_OBJECT) || [],
 };
 
+// All the getters to access the store
 const getters = {
     userEmail: (state) => state.email,
     userName: (state) => state.name,
@@ -32,6 +33,7 @@ const getters = {
     getTeamObj: (state) => state.teamObj,
 };
 
+// All the mutation methods to change the state of the store
 const mutations = {
     setToken(state, token) {
         state.token = token;
@@ -59,14 +61,15 @@ const mutations = {
     },
 };
 
+// Action conitains all the methods which perform some operation of the state 
+// And it uses the mutation method using commit to change the state of the store
 const actions = {
+    // Here in login action we will set the token, user, email all the data fo user
+    // Into the state and localStorage to use it later in the application
     async login({ commit }, data) {
-        //console.log(data, ' calling from action');
-        try {
-            const response = await axios.post(`${config.BaseUrl}/auth/login`, data);
+        const response = await loginUser(data);
+        if (response !== false) {
             const { message, token, email, name } = response.data;
-            //console.log(email, message, name, token);
-
             localStorage.setItem(TOKEN_KEY, token);
             localStorage.setItem(EMAIL_KEY, email);
             localStorage.setItem(MESSAGE_KEY, message);
@@ -77,20 +80,14 @@ const actions = {
             commit('setEmail', email);
             commit('setName', name);
             return true;
-        } catch (error) {
-            const msg = error.response.data;
-            console.log(msg);
+        } else {
             return false;
         }
     },
 
     async fetchAllEmail({ commit }) {
         //this function will fetch the data and store the all users in the store
-        const response = await axios.get(`${config.BaseUrl}/users`, {
-            headers: {
-                Authorization: state.token,
-            },
-        });
+        const response = await getAllEmail(state.token);
         const allUserArr = [];
         for (let i = 0; i < response.data.length; i++) {
             allUserArr.push(response.data[i].email);
@@ -101,11 +98,7 @@ const actions = {
 
     async fetchAllTeam({ commit }) {
         //this function will fetch all team data the data
-        const response = await axios.get(`${config.BaseUrl}/teams`, {
-            headers: {
-                Authorization: state.token,
-            },
-        });
+        const response = await getAllTeam(state.token);
         localStorage.setItem(TEAM_OBJECT, response.data);
         commit('setTeamObj', response.data);
 
@@ -128,15 +121,16 @@ const actions = {
         localStorage.setItem(ALL_TEAMS, teamEl);
         commit('setAllTeam', teamEl);
     },
-    async setAllTeam({commit},data){
+
+    async setAllTeam({ commit }, data) {
         localStorage.setItem(ALL_TEAMS, data);
-        commit('setAllTeam',data);
+        commit('setAllTeam', data);
     },
-    async setAllTeamName({commit},data){
+
+    async setAllTeamName({ commit }, data) {
         localStorage.setItem(ALL_TEAM_NAME, data);
-        commit('setAllTeamName',data);
-    }
-    
+        commit('setAllTeamName', data);
+    },
 };
 
 export default {
