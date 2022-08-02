@@ -74,6 +74,11 @@
                 </div>
             </form>
         </div>
+        <div class="sample-cred">
+        <p class="faded">Use below Demo Credentials to access the website without creating an account</p>
+        <p class="faded"><span class="Yellow">Email :</span> sachin@gmail.com</p>
+        <p class="faded" ><span class="Yellow">Password :</span> Test@123</p>
+        </div>
     </div>
 </template>
 
@@ -125,7 +130,7 @@ export default {
 
     methods: {
         ...mapActions(['fetchAllEmail', 'fetchAllTeam', 'login']),
-        
+
         async helper() {
             await this.fetchAllEmail();
             await this.fetchAllTeam();
@@ -158,7 +163,7 @@ export default {
                 this.onLogin();
             }
         },
-        
+
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
@@ -193,5 +198,15 @@ export default {
     );
     z-index: -1;
     border-radius: 100% 0 0 0%;
+}
+.sample-cred{
+    text-align: center;
+}
+.faded{
+    margin: 10px 20px;
+    color: rgba(128, 128, 128, 0.747);
+}
+.Yellow{
+    color: rgb(255, 145, 0);
 }
 </style>
