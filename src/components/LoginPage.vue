@@ -74,11 +74,11 @@
                 </div>
             </form>
         </div>
-        <!-- <div class="sample-cred">
+        <div class="sample-cred">
         <p class="faded">Use below Demo Credentials to access the website without creating an account</p>
         <p class="faded"><span class="Yellow">Email :</span> sachin@gmail.com</p>
         <p class="faded" ><span class="Yellow">Password :</span> Test@123</p>
-        </div> -->
+        </div>
     </div>
 </template>
 
